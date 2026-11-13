@@ -10,7 +10,7 @@ interface FloatingItem {
   rotation: number;
   vRot: number;
   size: number;
-  type: "banana" | "brinjal" | "sparklePink" | "sparkleYellow";
+  type: "banana" | "brinjal" | "sparklePink" | "sparkleYellow" | "hieroglyph";
   opacity: number;
 }
 
@@ -24,19 +24,27 @@ export default function PixelBackground() {
     if (!ctx) return;
 
     let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
+    let width = window.innerWidth;
+    let height = window.innerHeight;
 
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    // Retina / High-DPI support to ensure smooth, non-pixelated vector glyph rendering
+    const setupCanvasResolution = () => {
+      if (!canvas || !ctx) return;
+      width = window.innerWidth;
+      height = window.innerHeight;
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    window.addEventListener("resize", handleResize);
+    setupCanvasResolution();
+    window.addEventListener("resize", setupCanvasResolution);
 
-    // Generate floating items
-    const count = Math.min(Math.floor((width * height) / 35000), 45) + 20;
+    // Generate floating items with bananas, brinjals, sparkles, and the smooth "𓂸" hieroglyph
+    const count = Math.min(Math.floor((width * height) / 30000), 55) + 25;
     const items: FloatingItem[] = [];
 
     const types: FloatingItem["type"][] = [
@@ -44,6 +52,8 @@ export default function PixelBackground() {
       "brinjal",
       "banana",
       "brinjal",
+      "hieroglyph",
+      "hieroglyph",
       "sparklePink",
       "sparkleYellow",
     ];
@@ -53,10 +63,10 @@ export default function PixelBackground() {
         x: Math.random() * width,
         y: Math.random() * height,
         vx: (Math.random() - 0.5) * 0.45,
-        vy: -0.3 - Math.random() * 0.4, // gently drifting upwards
+        vy: -0.25 - Math.random() * 0.45, // gently drifting upwards
         rotation: Math.random() * Math.PI * 2,
-        vRot: (Math.random() - 0.5) * 0.015,
-        size: Math.random() > 0.4 ? (Math.random() * 16 + 26) : (Math.random() * 8 + 8),
+        vRot: (Math.random() - 0.5) * 0.012,
+        size: Math.random() > 0.4 ? Math.random() * 16 + 28 : Math.random() * 10 + 12,
         type: types[Math.floor(Math.random() * types.length)],
         opacity: Math.random() * 0.4 + 0.5,
       });
@@ -113,6 +123,24 @@ export default function PixelBackground() {
       c.fillRect(-4 * p, -5 * p, 8 * p, 2 * p);
     }
 
+    // Draw smooth, non-pixelated "𓂸" hieroglyph with clean vector anti-aliasing
+    function drawSmoothHieroglyph(c: CanvasRenderingContext2D, size: number) {
+      c.font = `bold ${Math.round(size * 1.15)}px 'EgyptianHieroglyphs', 'Noto Sans Egyptian Hieroglyphs', 'Segoe UI Historic', 'Apple Symbols', sans-serif`;
+      c.textAlign = "center";
+      c.textBaseline = "middle";
+
+      // Soft ambient purple glow
+      c.shadowColor = "rgba(192, 132, 252, 0.6)";
+      c.shadowBlur = 8;
+      c.fillStyle = "#f3e8ff"; // clean lavender-white smooth vector
+      c.fillText("𓂸", 0, 0);
+
+      // Inner subtle sheen
+      c.shadowBlur = 0;
+      c.fillStyle = "rgba(250, 204, 21, 0.4)";
+      c.fillText("𓂸", -0.5, -0.5);
+    }
+
     // Draw pixel sparkle cross (+)
     function drawPixelSparkle(c: CanvasRenderingContext2D, size: number, color: string) {
       const p = size / 5;
@@ -127,6 +155,8 @@ export default function PixelBackground() {
     const handleClick = (e: MouseEvent) => {
       const clickX = e.clientX;
       const clickY = e.clientY;
+      const burstTypes: FloatingItem["type"][] = ["banana", "brinjal", "hieroglyph"];
+
       for (let k = 0; k < 6; k++) {
         const angle = (Math.PI * 2 * k) / 6 + (Math.random() - 0.5);
         const speed = Math.random() * 3 + 2;
@@ -138,7 +168,7 @@ export default function PixelBackground() {
           rotation: Math.random() * Math.PI,
           vRot: (Math.random() - 0.5) * 0.1,
           size: Math.random() * 12 + 24,
-          type: Math.random() > 0.5 ? "banana" : "brinjal",
+          type: burstTypes[Math.floor(Math.random() * burstTypes.length)],
           opacity: 1,
         });
       }
@@ -196,6 +226,8 @@ export default function PixelBackground() {
           drawPixelBanana(ctx, item.size);
         } else if (item.type === "brinjal") {
           drawPixelBrinjal(ctx, item.size);
+        } else if (item.type === "hieroglyph") {
+          drawSmoothHieroglyph(ctx, item.size);
         } else if (item.type === "sparklePink") {
           drawPixelSparkle(ctx, item.size, "#ff70a6");
         } else if (item.type === "sparkleYellow") {
@@ -206,7 +238,7 @@ export default function PixelBackground() {
       }
 
       // Cap burst items to avoid memory bloat
-      if (items.length > 80) {
+      if (items.length > 85) {
         items.splice(count, items.length - count);
       }
 
@@ -217,7 +249,7 @@ export default function PixelBackground() {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
+      window.removeEventListener("resize", setupCanvasResolution);
       window.removeEventListener("pointerdown", handleClick);
     };
   }, []);
@@ -230,4 +262,3 @@ export default function PixelBackground() {
     />
   );
 }
-

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@font-face {
+  font-family: 'EgyptianHieroglyphs';
+  src: url('/fonts/NotoSansEgyptianHieroglyphs-Regular.ttf') format('truetype');
+  font-display: swap;
+}
+
 @layer base {
   :root {
     --font-pixel: "Press Start 2P", monospace;
