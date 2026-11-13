@@ -10,13 +10,13 @@ Open the file [`app/config/statusConfig.ts`](file:///home/abhrajit/Desktop/souma
 
 ```typescript
 // 🟢 STATE 1: Type your first state here
-export const STATE_1: string = "DIHHHH STATE 1: Feeling completely Bananas & fully charged! 🍌⚡";
+export const STATE_1: string = "DIHHHH STATE 1: Feeling completely Bananas & fully ERECT! 🍌⚡";
 
 // 🟣 STATE 2: Type your second state here
-export const STATE_2: string = "DIHHHH STATE 2: Peak Brinjal energy achieved. Maximum chill mode. 🍆🕶️";
+export const STATE_2: string = "DIHHHH STATE 2: Softieee and mushyy 🍆🕶️";
 
 // 🟡 STATE 3: Type your third state here
-export const STATE_3: string = "DIHHHH STATE 3: Dihhhh level critical! Brain executing 8-bit quantum code. 👾🚀";
+export const STATE_3: string = "DIHHHH STATE 3: Critical level about to activate 👾🚀";
 ```
 
 Simply replace the text inside the quotes with whatever states you want!
