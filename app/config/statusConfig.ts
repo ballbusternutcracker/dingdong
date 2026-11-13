@@ -22,7 +22,7 @@
 export const STATE_1: string =
   process.env.STATE_1 ||
   process.env.NEXT_PUBLIC_STATE_1 ||
-  "DIHHHH STATE 1: Feeling completely Bananas & fully charged! 🍌⚡";
+  "DIHHHH STATE 1: Feeling completely Bananas & fully ERECT! 🍌⚡";
 
 // ----------------------------------------------------------------------------
 // 🟣 STATE 2: Type your second state here
@@ -30,15 +30,14 @@ export const STATE_1: string =
 export const STATE_2: string =
   process.env.STATE_2 ||
   process.env.NEXT_PUBLIC_STATE_2 ||
-  "DIHHHH STATE 2: Peak Brinjal energy achieved. Maximum chill mode. 🍆🕶️";
-
+  "DIHHHH STATE 2: Softieee and mushyy 🍆🕶️";
 // ----------------------------------------------------------------------------
 // 🟡 STATE 3: Type your third state here
 // ----------------------------------------------------------------------------
 export const STATE_3: string =
   process.env.STATE_3 ||
   process.env.NEXT_PUBLIC_STATE_3 ||
-  "DIHHHH STATE 3: Dihhhh level critical! Brain executing 8-bit quantum code. 👾🚀";
+  "DIHHHH STATE 3: Critical level about to activate 👾🚀";
 
 // ----------------------------------------------------------------------------
 // Helper array aggregating the three open variables
